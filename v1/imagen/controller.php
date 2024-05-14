@@ -22,4 +22,5 @@ class Controlador{
         $con->closeConnection();
         return $this->lista;
     }
+
 }

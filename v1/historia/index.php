@@ -19,21 +19,22 @@ if($_version == 'v1'){
     if($_mantenedor == 'historia'){
         switch ($_metodo){
             case 'GET':
-                if ($_header == $_token_get){
-                    
-                    //DE ESTA FORMA SE CREA UNA CONEXION CON LA BASE DE DATOS PARA UTILIZAR LA INFORMACION QUE ESTA CONTIENE
+                if ($_header == $_token_get) {
                     include_once 'controller.php';
                     include_once '../conexion.php';
                     $control = new Controlador();
                     $lista = $control->getAll();
-                    
                     http_response_code(200);
                     echo json_encode(["data" => $lista]);
-                }else{
+                } else {
                     http_response_code(401);
                     echo json_encode(["Error" => "No tiene autorizacion GET"]);
                 }
                 break;
+            case 'POST':
+                echo 'post...';
+                break;
+            
             default:
                 http_response_code(405);
                 echo json_encode(["Error" => "No implementado"]);

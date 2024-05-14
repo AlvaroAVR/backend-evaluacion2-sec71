@@ -17,14 +17,14 @@ if (strlen($_parametros)> 0){
 
 //HEADERS
 header("Acces-Control-Allow-Origin: *");
-header("Acces-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE");
+header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE");
 header("Content-Type: application/json; charset=UTF-8");
 
 //AUTHORIZATION
 $_header = null;
 try {
     $_header = isset(getallheaders()['Authorization']) ? getallheaders()['Authorization'] : null;
-    if ($_header === null){
+    if ($_header === null) {
         throw new Exception("No tiene autorizacion");
     }
 } catch (Exception $e) {
@@ -33,7 +33,6 @@ try {
 }
 
 //TOKENS
-$_token_get_evaluacion = 'Bearer ciisa';
 $_token_get = 'Bearer get';
 $_token_post = 'Bearer post';
 $_token_put = 'Bearer put';
