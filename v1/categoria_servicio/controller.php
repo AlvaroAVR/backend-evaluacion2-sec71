@@ -26,7 +26,8 @@ class Controlador{
     public function postNuevo($_nuevoObjeto)
     {
         $con = new Conexion();
-        $id = count($this->getAll()) + 1;
+        $ids = array_column($this->getAll(), 'id');
+        $id = $ids ? max($ids) + 1 : 1;
         $sql = "INSERT INTO categoria_servicio (id, nombre, imagen, texto, activo) VALUES ($id, '$_nuevoObjeto->nombre', '$_nuevoObjeto->imagen', '$_nuevoObjeto->texto', true);";
         $rs = [];
         try {

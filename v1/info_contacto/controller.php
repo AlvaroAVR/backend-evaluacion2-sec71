@@ -1,6 +1,7 @@
 <?php
 
-class Controlador{
+class Controlador
+{
     private $lista;
 
     public function __construct()
@@ -8,13 +9,14 @@ class Controlador{
         $this->lista = [];
     }
 
-    public function getAll(){
+    public function getAll()
+    {
         $con = new Conexion();
         $sql = "SELECT id, nombre, texto, texto_adicional, activo FROM info_contacto;";
         $rs = mysqli_query($con->getConnection(), $sql);
-        if($rs){
-            while ($tupla = mysqli_fetch_assoc($rs)){
-                $tupla['activo'] = $tupla['activo'] == 1 ? true: false;
+        if ($rs) {
+            while ($tupla = mysqli_fetch_assoc($rs)) {
+                $tupla['activo'] = $tupla['activo'] == 1 ? true : false;
                 array_push($this->lista, $tupla);
             }
             mysqli_free_result($rs);
@@ -26,9 +28,9 @@ class Controlador{
     public function postNuevo($_nuevoObjeto)
     {
         $con = new Conexion();
-        $id = count($this->getAll()) + 1;
+        $ids = array_column($this->getAll(), 'id');
+        $id = $ids ? max($ids) + 1 : 1;
         $sql = "INSERT INTO info_contacto (id, nombre, texto, texto_adicional, activo) VALUES ($id, '$_nuevoObjeto->nombre', '$_nuevoObjeto->texto', '$_nuevoObjeto->texto_adicional', true);";
-        //INSERT INTO info_contacto (id, nombre, texto, texto_adicional, activo) VALUES (0, 'NOMBRE', 'TEXTO', 'TEXTO ADICIONAL', true);
         $rs = [];
         try {
             $rs = mysqli_query($con->getConnection(), $sql);
@@ -110,7 +112,7 @@ class Controlador{
         return null;
     }
 
-    public function putAll($_nombre, $_texto ,$_textoAdicional, $_id)
+    public function putAll($_nombre, $_texto, $_textoAdicional, $_id)
     {
         $con = new Conexion();
         $sql = "UPDATE info_contacto SET nombre = '$_nombre', texto = '$_texto', texto_adicional = '$_textoAdicional' WHERE id = $_id;";

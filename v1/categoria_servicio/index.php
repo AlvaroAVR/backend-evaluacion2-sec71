@@ -19,18 +19,18 @@ if (count($_parametros) > 0) {
     }
 }
 
-if($_version == 'v1'){
-    if($_mantenedor == 'categoria_servicio'){
-        switch ($_metodo){
+if ($_version == 'v1') {
+    if ($_mantenedor == 'categoria_servicio') {
+        switch ($_metodo) {
             case 'GET':
-                if ($_header == $_token_get){
+                if ($_header == $_token_get) {
                     include_once 'controller.php';
                     include_once '../conexion.php';
                     $control = new Controlador();
                     $lista = $control->getAll();
                     http_response_code(200);
                     echo json_encode(["data" => $lista]);
-                }else{
+                } else {
                     http_response_code(401);
                     echo json_encode(["Error" => "No tiene autorizacion GET"]);
                 }
@@ -55,57 +55,56 @@ if($_version == 'v1'){
                 }
                 break;
 
-                case 'PATCH':
-                    if ($_header == $_token_patch) {
-                        if ($existeId && $existeAccion) {
-                            include_once 'controller.php';
-                            include_once '../conexion.php';
-                            $control = new Controlador();
-                            if ($valorAccion == 'encender') {
-                                $respuesta = $control->patchEncenderApagar($valorId, 'true');
-                                http_response_code(200);
-                                echo json_encode(["data" => $respuesta]);
-                            } else if ($valorAccion == 'apagar') {
-                                $respuesta = $control->patchEncenderApagar($valorId, 'false');
-                                http_response_code(200);
-                                echo json_encode(["data" => $respuesta]);
-                            } else {
-                                echo 'error con acciones...';
-                            }
+            case 'PATCH':
+                if ($_header == $_token_patch) {
+                    if ($existeId && $existeAccion) {
+                        include_once 'controller.php';
+                        include_once '../conexion.php';
+                        $control = new Controlador();
+                        if ($valorAccion == 'encender') {
+                            $respuesta = $control->patchEncenderApagar($valorId, 'true');
+                            http_response_code(200);
+                            echo json_encode(["data" => $respuesta]);
+                        } else if ($valorAccion == 'apagar') {
+                            $respuesta = $control->patchEncenderApagar($valorId, 'false');
+                            http_response_code(200);
+                            echo json_encode(["data" => $respuesta]);
                         } else {
-                            echo 'error...';
+                            echo 'error con acciones...';
                         }
                     } else {
-                        http_response_code(401);
-                        echo json_encode(["Error" => "No tiene autorizacion PATCH"]);
+                        echo 'error...';
                     }
-                    break;
+                } else {
+                    http_response_code(401);
+                    echo json_encode(["Error" => "No tiene autorizacion PATCH"]);
+                }
+                break;
             case 'PUT':
                 if ($_header == $_token_put) {
                     include_once 'controller.php';
                     include_once '../conexion.php';
                     $control = new Controlador();
                     $body = json_decode(file_get_contents("php://input", true));
-                    if($body->nombre && !$body->imagen && !$body->texto){
+                    if ($body->nombre && !$body->imagen && !$body->texto) {
                         $respuesta = $control->putNombreById($body->nombre, $body->id);
                         http_response_code(200);
                         echo json_encode(["data" => $respuesta]);
-                    }else if($body->imagen && !$body->texto && !$body->nombre){
+                    } else if ($body->imagen && !$body->texto && !$body->nombre) {
                         $respuesta = $control->putImagenById($body->imagen, $body->id);
                         http_response_code(200);
                         echo json_encode(["data" => $respuesta]);
-                    }else if($body->texto && !$body->nombre && !$body->imagen ){
+                    } else if ($body->texto && !$body->nombre && !$body->imagen) {
                         $respuesta = $control->putTextoById($body->texto, $body->id);
                         http_response_code(200);
                         echo json_encode(["data" => $respuesta]);
-                    }else if($body->texto && $body->nombre && $body->imagen){
-                        $respuesta = $control->putAll($body->nombre, $body->imagen , $body->texto, $body->id);
+                    } else if ($body->texto && $body->nombre && $body->imagen) {
+                        $respuesta = $control->putAll($body->nombre, $body->imagen, $body->texto, $body->id);
                         http_response_code(200);
                         echo json_encode(["data" => $respuesta]);
-                    }else{
+                    } else {
                         echo "Error: Parametros no validos";
                     }
-                    
                 } else {
                     http_response_code(401);
                     echo json_encode(["Error" => "No tiene autorizacion PUT"]);
